@@ -1,0 +1,33 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#39ff14;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#28e000;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#39ff14;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#00ff88;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main rounded square background -->
+  <rect width="200" height="200" rx="40" fill="url(#bgGradient)"/>
+  
+  <!-- Shield icon -->
+  <path d="M100 40L50 60V110C50 145 73 176.85 100 185C127 176.85 150 145 150 110V60L100 40Z" 
+        fill="rgba(0,0,0,0.2)" stroke="rgba(0,0,0,0.4)" stroke-width="3"/>
+  
+  <!-- Chart line inside shield -->
+  <path d="M70 130L85 115L95 120L110 100L125 105L140 90" 
+        stroke="#000000" stroke-width="5" stroke-linecap="round" 
+        stroke-linejoin="round" fill="none" opacity="0.3"/>
+  
+  <!-- Points on the chart -->
+  <circle cx="70" cy="130" r="4" fill="#000000" opacity="0.3"/>
+  <circle cx="85" cy="115" r="4" fill="#000000" opacity="0.3"/>
+  <circle cx="95" cy="120" r="4" fill="#000000" opacity="0.3"/>
+  <circle cx="110" cy="100" r="4" fill="#000000" opacity="0.3"/>
+  <circle cx="125" cy="105" r="4" fill="#000000" opacity="0.3"/>
+  <circle cx="140" cy="90" r="4" fill="#000000" opacity="0.3"/>
+</svg>

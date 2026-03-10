@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "**",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/bingx/:path*",   "destination": "/api/exchanges.js" },
+    { "source": "/api/bingx",          "destination": "/api/exchanges.js" },
+    { "source": "/api/bitget/:path*",  "destination": "/api/exchanges.js" },
+    { "source": "/api/bitget",         "destination": "/api/exchanges.js" },
+    { "source": "/api/mexc/:path*",    "destination": "/api/exchanges.js" },
+    { "source": "/api/mexc",           "destination": "/api/exchanges.js" },
+    { "source": "/api/lbank/:path*",   "destination": "/api/exchanges.js" },
+    { "source": "/api/lbank",          "destination": "/api/exchanges.js" },
+    { "source": "/api/bitunix/:path*", "destination": "/api/exchanges.js" },
+    { "source": "/api/bitunix",        "destination": "/api/exchanges.js" },
+    { "source": "/api/bybit/:path*",   "destination": "/api/exchanges.js" },
+    { "source": "/api/bybit",          "destination": "/api/exchanges.js" },
+    { "source": "/api/binance/:path*", "destination": "/api/exchanges.js" },
+    { "source": "/api/binance",        "destination": "/api/exchanges.js" },
+    { "source": "/api/okx/:path*",     "destination": "/api/exchanges.js" },
+    { "source": "/api/okx",            "destination": "/api/exchanges.js" },
+    { "source": "/api/gate/:path*",    "destination": "/api/exchanges.js" },
+    { "source": "/api/gate",           "destination": "/api/exchanges.js" },
+    { "source": "/api/phemex/:path*",  "destination": "/api/exchanges.js" },
+    { "source": "/api/phemex",         "destination": "/api/exchanges.js" },
+    { "source": "/api/bitmart/:path*", "destination": "/api/exchanges.js" },
+    { "source": "/api/bitmart",        "destination": "/api/exchanges.js" },
+    { "source": "/api/news-proxy",     "destination": "/api/news-proxy.js" },
+    { "source": "/api/credentials",    "destination": "/api/credentials.js" },
+    { "source": "/api/operations",     "destination": "/api/operations.js" },
+    { "source": "/api/ai-coach",       "destination": "/api/ai-coach.js" },
+    { "source": "/api/create-checkout",   "destination": "/api/create-checkout.js" },
+    { "source": "/api/group-invitations", "destination": "/api/group-invitations.js" },
+    { "source": "/api/health",            "destination": "/api/health.js" },
+    { "source": "/app",                   "destination": "/platform.html" },
+    { "source": "/login",               "destination": "/login.html" },
+    { "source": "/register",            "destination": "/register.html" },
+    { "source": "/payment",             "destination": "/payment.html" },
+    { "source": "/",                    "destination": "/index.html" }
+  ]
+}

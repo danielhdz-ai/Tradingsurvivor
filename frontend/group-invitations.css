@@ -1,0 +1,382 @@
+/* =====================================================
+   GROUP INVITATIONS STYLES
+   Estilos para el sistema de invitaciones
+   ===================================================== */
+
+/* Modal de invitación */
+.invitation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+.invitation-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+}
+
+.invitation-modal-content {
+    background: var(--bg-primary, #1a1a1a);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease;
+}
+
+.invitation-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.invitation-header .group-emoji {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.invitation-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--text-primary, #fff);
+}
+
+.invitation-body {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.invitation-body .group-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary, #fff);
+    margin-bottom: 8px;
+}
+
+.invitation-body .group-description {
+    font-size: 14px;
+    color: var(--text-secondary, #888);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.invitation-body .invitation-from,
+.invitation-body .invitation-expires {
+    font-size: 14px;
+    color: var(--text-secondary, #888);
+    margin-bottom: 8px;
+}
+
+.invitation-body .invitation-from strong {
+    color: var(--accent-primary, #00d4ff);
+}
+
+.invitation-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.invitation-actions .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.invitation-actions .btn-primary {
+    background: linear-gradient(135deg, #00d4ff 0%, #7b2ff7 100%);
+    color: white;
+}
+
+.invitation-actions .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+}
+
+.invitation-actions .btn-secondary {
+    background: var(--bg-secondary, #2a2a2a);
+    color: var(--text-primary, #fff);
+}
+
+.invitation-actions .btn-secondary:hover {
+    background: var(--bg-tertiary, #333);
+}
+
+/* Lista de invitaciones */
+.invitations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.invitation-card {
+    background: var(--bg-secondary, #2a2a2a);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.invitation-card:hover {
+    background: var(--bg-tertiary, #333);
+    transform: translateX(4px);
+}
+
+.invitation-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.invitation-info .group-emoji {
+    font-size: 40px;
+}
+
+.invitation-details h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    color: var(--text-primary, #fff);
+}
+
+.invitation-details p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-secondary, #888);
+}
+
+.invitation-card .invitation-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+.no-invitations {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-secondary, #888);
+    font-size: 14px;
+}
+
+/* Notificaciones */
+.notification {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    z-index: 10001;
+    animation: slideInRight 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.notification-success {
+    background: linear-gradient(135deg, #00d084 0%, #00ff9d 100%);
+}
+
+.notification-error {
+    background: linear-gradient(135deg, #ff3b3b 0%, #ff6b6b 100%);
+}
+
+.notification-info {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+}
+
+.notification.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+/* Botón de invitar */
+.btn-invite {
+    background: linear-gradient(135deg, #00d4ff 0%, #7b2ff7 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-invite:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+}
+
+.btn-invite svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Input de invitación */
+.invite-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.invite-input-group input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color, #333);
+    background: var(--bg-secondary, #2a2a2a);
+    color: var(--text-primary, #fff);
+    font-size: 14px;
+}
+
+.invite-input-group input:focus {
+    outline: none;
+    border-color: var(--accent-primary, #00d4ff);
+}
+
+/* Badge de invitaciones pendientes */
+.invitation-badge {
+    background: linear-gradient(135deg, #ff3b3b 0%, #ff6b6b 100%);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 12px;
+    min-width: 18px;
+    text-align: center;
+    display: inline-block;
+}
+
+/* Link de invitación */
+.invitation-link-container {
+    background: var(--bg-secondary, #2a2a2a);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.invitation-link-container input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-primary, #fff);
+    font-size: 12px;
+    font-family: monospace;
+}
+
+.invitation-link-container input:focus {
+    outline: none;
+}
+
+.btn-copy-link {
+    background: var(--bg-tertiary, #333);
+    color: var(--text-primary, #fff);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-copy-link:hover {
+    background: var(--accent-primary, #00d4ff);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .invitation-modal-content {
+        padding: 24px;
+        width: 95%;
+    }
+
+    .invitation-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .invitation-card .invitation-actions {
+        width: 100%;
+    }
+
+    .invitation-card .invitation-actions .btn {
+        flex: 1;
+    }
+
+    .notification {
+        left: 12px;
+        right: 12px;
+        top: 12px;
+    }
+}

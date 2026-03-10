@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Survivor — Crear Cuenta</title>
+    <link rel="icon" href="logos/trader-survivor-logo.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script type="importmap">{ "imports": { "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2" } }</script>
+
+    <style>
+        :root {
+            --primary: #39ff14;
+            --primary-glow: rgba(57,255,20,0.15);
+            --primary-glow-strong: rgba(57,255,20,0.3);
+            --bg: #000000;
+            --bg-card: #0a0a0a;
+            --bg-surface: #111111;
+            --bg-input: #161616;
+            --border: rgba(57,255,20,0.18);
+            --border-soft: rgba(255,255,255,0.07);
+            --text: #ffffff;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --red-dim: rgba(255,68,68,0.12);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { height: 100%; font-size: 16px; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* ─── LAYOUT ─────────────────────────────────────── */
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 1fr 500px;
+            height: 100vh;
+        }
+
+        /* ─── LEFT PANEL ─────────────────────────────────── */
+        .left-panel {
+            position: relative;
+            overflow: hidden;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 56px;
+        }
+
+        /* Diagonal accent strip */
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            top: 0; right: -2px;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, var(--primary) 50%, transparent 100%);
+            opacity: 0.3;
+        }
+
+        .left-grid-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(57,255,20,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57,255,20,0.035) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse 90% 90% at 40% 50%, black 20%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .left-glow-top {
+            position: absolute;
+            top: -80px; right: 80px;
+            width: 520px; height: 520px;
+            background: radial-gradient(circle, rgba(57,255,20,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .left-glow-bottom {
+            position: absolute;
+            bottom: -60px; left: -80px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(57,255,20,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Logo */
+        .left-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .left-logo img {
+            height: 52px;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        .left-logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .left-logo-text span { color: var(--primary); }
+
+        /* Main content */
+        .left-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .left-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(57,255,20,0.05);
+            margin-bottom: 22px;
+            width: fit-content;
+        }
+
+        .left-badge i { font-size: 0.7rem; }
+
+        .left-headline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 3vw, 2.55rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+            margin-bottom: 14px;
+        }
+
+        .left-headline .accent { color: var(--primary); }
+
+        .left-subline {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 500px;
+            margin-bottom: 36px;
+        }
+
+        /* Feature cards grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        .feat-card {
+            padding: 16px 18px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            transition: all 0.3s;
+            animation: slideUp 0.5s ease both;
+        }
+
+        .feat-card:nth-child(1) { animation-delay: 0.08s; }
+        .feat-card:nth-child(2) { animation-delay: 0.16s; }
+        .feat-card:nth-child(3) { animation-delay: 0.24s; }
+        .feat-card:nth-child(4) { animation-delay: 0.32s; }
+        .feat-card:nth-child(5) { animation-delay: 0.40s; }
+        .feat-card:nth-child(6) { animation-delay: 0.48s; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feat-card:hover {
+            border-color: var(--border);
+            background: rgba(57,255,20,0.04);
+        }
+
+        .feat-icon {
+            width: 34px; height: 34px;
+            border-radius: 9px;
+            background: var(--primary-glow);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.82rem;
+            margin-bottom: 10px;
+        }
+
+        .feat-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .feat-desc {
+            font-size: 0.73rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Price tag */
+        .price-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 20px;
+            background: rgba(57,255,20,0.05);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            width: fit-content;
+        }
+
+        .price-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(57,255,20,0.4);
+            line-height: 1;
+        }
+
+        .price-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .price-details strong {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .price-details span {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .price-crypto {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            padding-left: 14px;
+            border-left: 1px solid var(--border-soft);
+        }
+
+        /* Footer */
+        .left-footer {
+            position: relative;
+            z-index: 2;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .left-footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .left-footer a:hover { color: var(--primary); }
+
+        /* ─── RIGHT PANEL ─────────────────────────────────── */
+        .right-panel {
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-soft);
+            overflow-y: auto;
+        }
+
+        .right-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100%;
+            padding: 44px 44px;
+        }
+
+        /* ─── FORM HEADER ─────────────────────────────────── */
+        .form-header {
+            margin-bottom: 28px;
+        }
+
+        .form-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 5px;
+        }
+
+        .form-header p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* ─── MESSAGE ─────────────────────────────────────── */
+        .msg {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .msg.error {
+            background: var(--red-dim);
+            border: 1px solid rgba(255,68,68,0.3);
+            color: #ff8080;
+        }
+
+        .msg.success {
+            background: var(--primary-glow);
+            border: 1px solid var(--border);
+            color: var(--primary);
+        }
+
+        .msg.show { display: flex; }
+
+        /* ─── FORM FIELDS ─────────────────────────────────── */
+        .field-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .field-group {
+            margin-bottom: 16px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 7px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-soft);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.88rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(57,255,20,0.08);
+        }
+
+        .field-input::placeholder { color: var(--text-muted); }
+
+        .field-eye {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.82rem;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .field-eye:hover { color: var(--text); }
+
+        /* Password strength bar */
+        .pwd-strength {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pwd-bars {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .pwd-bar {
+            height: 3px;
+            flex: 1;
+            border-radius: 2px;
+            background: var(--border-soft);
+            transition: background 0.3s;
+        }
+
+        .pwd-bar.active-weak   { background: #ff4444; }
+        .pwd-bar.active-fair   { background: #ffaa00; }
+        .pwd-bar.active-strong { background: var(--primary); }
+
+        .pwd-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            min-width: 44px;
+            text-align: right;
+        }
+
+        /* Checkbox */
+        .checkbox-wrap {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-wrap input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            min-width: 16px;
+            accent-color: var(--primary);
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrap label {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            cursor: pointer;
+        }
+
+        .checkbox-wrap label a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .checkbox-wrap label a:hover { text-decoration: underline; }
+
+        /* ─── SUBMIT BUTTON ───────────────────────────────── */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--primary);
+            color: #000;
+            font-size: 0.95rem;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 0 24px rgba(57,255,20,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-submit:hover {
+            background: #50ff30;
+            box-shadow: 0 0 40px rgba(57,255,20,0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ─── SWITCH LINK ─────────────────────────────────── */
+        .switch-line {
+            text-align: center;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            margin-top: 20px;
+        }
+
+        .switch-line a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .switch-line a:hover { text-decoration: underline; }
+
+        /* ─── RESPONSIVE ─────────────────────────────────── */
+        @media (max-width: 960px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            .left-panel { display: none; }
+            body { overflow: auto; }
+            .right-panel { border-left: none; min-height: 100vh; }
+        }
+
+        /* ─── ANIMATIONS ─────────────────────────────────── */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .right-inner { animation: fadeIn 0.45s ease both; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .fa-spinner { animation: spin 0.8s linear infinite; }
+
+        /* ─── MODALS ──────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            max-width: 640px;
+            width: 100%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 22px 26px;
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 { font-weight: 700; font-size: 1.02rem; }
+
+        .modal-close {
+            width: 30px; height: 30px;
+            border-radius: 7px;
+            background: none;
+            border: 1px solid var(--border-soft);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.82rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover { border-color: var(--border); color: var(--text); }
+
+        .modal-body {
+            padding: 24px 26px;
+            overflow-y: auto;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .modal-body h4 {
+            color: var(--text);
+            font-size: 0.93rem;
+            font-weight: 700;
+            margin: 18px 0 7px;
+        }
+
+        .modal-body h4:first-child { margin-top: 0; }
+        .modal-body strong { color: var(--primary); }
+
+        /* success screen */
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .success-screen.show { display: block; }
+
+        .success-icon {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            background: var(--primary-glow);
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 0 auto 24px;
+            box-shadow: 0 0 30px rgba(57,255,20,0.2);
+        }
+
+        .success-screen h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .success-screen p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- LEFT PANEL                                             -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div class="left-panel">
+        <div class="left-grid-bg"></div>
+        <div class="left-glow-top"></div>
+        <div class="left-glow-bottom"></div>
+
+        <!-- Logo -->
+        <a href="index.html" class="left-logo">
+            <img src="logos/traders-survivor-logo.png" alt="Trading Survivor">
+            <span class="left-logo-text">Trading<span>Survivor</span></span>
+        </a>
+
+        <!-- Main content -->
+        <div class="left-content">
+            <div class="left-badge">
+                <i class="fas fa-bolt"></i>
+                <span>Únete al 10% que sobrevive al mercado</span>
+            </div>
+
+            <h1 class="left-headline">
+                Cada trade registrado<br>
+                es un paso más hacia<br>
+                <span class="accent">tu supervivencia.</span>
+            </h1>
+
+            <p class="left-subline">
+                Tu cuenta de Trading Survivor te da acceso inmediato a todo el arsenal. No hay prueba, no hay límites — desde el primer día tienes las mismas herramientas que los mejores traders.
+            </p>
+
+            <!-- 6 feature mini-cards -->
+            <div class="features-grid">
+                <div class="feat-card">
+                    <div class="feat-icon"><i class="fas fa-image"></i></div>
+                    <div class="feat-title">Chartbook</div>
+                    <div class="feat-desc">Biblioteca visual de setups con capturas, etiquetas y anotaciones</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="feat-title">Playbook</div>
+                    <div class="feat-desc">Documenta estrategias y mide su rendimiento real con datos</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon"><i class="fas fa-star"></i></div>
+                    <div class="feat-title">Audición Funded</div>
+                    <div class="feat-desc">Registro y estadísticas completas de tus pruebas Funded</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon"><i class="fas fa-robot"></i></div>
+                    <div class="feat-title">AI Coach</div>
+                    <div class="feat-desc">Coach de trading con IA que analiza tus métricas y sugiere mejoras</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon"><i class="fas fa-pen-nib"></i></div>
+                    <div class="feat-title">Notebook</div>
+                    <div class="feat-desc">Diario de trading con notas, reglas y reflexiones por sesión</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon"><i class="fas fa-newspaper"></i></div>
+                    <div class="feat-title">News Feed</div>
+                    <div class="feat-desc">Noticias del mercado integradas en tu journal en tiempo real</div>
+                </div>
+            </div>
+
+            <!-- Price tag -->
+            <div class="price-tag">
+                <div class="price-amount">$129</div>
+                <div class="price-details">
+                    <strong>Acceso total · Anual</strong>
+                    <span>Sin mensualidades · Sin límites</span>
+                </div>
+                <div class="price-crypto">
+                    <i class="fab fa-bitcoin" style="color: #f7931a; font-size: 1rem;"></i>
+                    <span>Pago en<br>crypto</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="left-footer">
+            © 2026 Trading Survivor · <a href="index.html">Ver la web</a> · <a href="login.html">Ya tengo cuenta</a>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- RIGHT PANEL                                            -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div class="right-panel">
+        <div class="right-inner">
+
+            <!-- REGISTER FORM -->
+            <div id="registerView">
+                <div class="form-header">
+                    <h1>Crear Cuenta</h1>
+                    <p>Empieza a sobrevivir al mercado hoy</p>
+                </div>
+
+                <div class="msg" id="regMsg"></div>
+
+                <form onsubmit="handleRegister(event)" id="registerForm">
+                    <div class="field-row-2">
+                        <div>
+                            <label class="field-label">Nombre</label>
+                            <input type="text" class="field-input" id="firstName" placeholder="Tu nombre" autocomplete="given-name">
+                        </div>
+                        <div>
+                            <label class="field-label">Apellido</label>
+                            <input type="text" class="field-input" id="lastName" placeholder="Tu apellido" autocomplete="family-name">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Correo Electrónico</label>
+                        <input type="email" class="field-input" id="regEmail" placeholder="tu@email.com" required autocomplete="email">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Contraseña</label>
+                        <div class="field-wrap">
+                            <input type="password" class="field-input" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password" style="padding-right: 44px;" oninput="updateStrength(this.value)">
+                            <button type="button" class="field-eye" onclick="togglePwd('regPassword', this)" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="pwd-strength">
+                            <div class="pwd-bars">
+                                <div class="pwd-bar" id="bar1"></div>
+                                <div class="pwd-bar" id="bar2"></div>
+                                <div class="pwd-bar" id="bar3"></div>
+                                <div class="pwd-bar" id="bar4"></div>
+                            </div>
+                            <span class="pwd-label" id="pwdLabel">—</span>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Confirmar Contraseña</label>
+                        <div class="field-wrap">
+                            <input type="password" class="field-input" id="regConfirm" placeholder="Repite tu contraseña" required minlength="6" autocomplete="new-password" style="padding-right: 44px;">
+                            <button type="button" class="field-eye" onclick="togglePwd('regConfirm', this)" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-wrap">
+                        <input type="checkbox" id="termsCheck" required>
+                        <label for="termsCheck">
+                            Acepto los <a href="#" onclick="openModal('termsModal'); return false;">Términos de Servicio</a>
+                            y la <a href="#" onclick="openModal('privacyModal'); return false;">Política de Privacidad</a>
+                            de Trading Survivor
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <i class="fas fa-shield-alt"></i> Crear Mi Cuenta
+                    </button>
+                </form>
+
+                <div class="switch-line">
+                    ¿Ya tienes una cuenta? <a href="login.html">Iniciar Sesión</a>
+                </div>
+            </div>
+
+            <!-- SUCCESS SCREEN -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon"><i class="fas fa-check"></i></div>
+                <h2>¡Cuenta creada!</h2>
+                <p>
+                    Hemos enviado un email de confirmación a<br>
+                    <strong id="successEmail" style="color: var(--primary);"></strong><br><br>
+                    Confírma tu email y activa tu suscripción para acceder a la plataforma.
+                </p>
+                <a href="payment.html" class="btn-submit" style="text-decoration: none; max-width: 320px; margin: 0 auto; display: flex;">
+                    <i class="fas fa-credit-card"></i> Activar Suscripción — $129/año
+                </a>
+                <p style="margin-top: 16px; font-size: 0.78rem; color: var(--text-muted);">¿No recibiste el email? Revisa tu carpeta de spam</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ─── MODAL: TÉRMINOS ────────────────────────────────────── -->
+<div class="modal-overlay" id="termsModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Términos de Servicio</h3>
+            <button class="modal-close" onclick="closeModal('termsModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <p><strong>Última actualización:</strong> 8 de marzo de 2026</p>
+            <h4>1. Aceptación de los Términos</h4>
+            <p>Al registrarte y utilizar Trading Survivor ("la Plataforma"), aceptas estar vinculado por estos Términos de Servicio. Si no estás de acuerdo con alguno de estos términos, no debes utilizar la plataforma.</p>
+            <h4>2. Descripción del Servicio</h4>
+            <p>Trading Survivor es una plataforma de journaling y análisis de trading que permite a los usuarios registrar, analizar y gestionar sus operaciones en mercados financieros. El servicio incluye herramientas de análisis estadístico, gestión de cuentas funded, calendario financiero, chartbook, playbook, AI coach y funciones de comunidad.</p>
+            <h4>3. Cuenta de Usuario</h4>
+            <p>Para acceder a las funcionalidades completas debes crear una cuenta. Eres responsable de mantener la confidencialidad de tus credenciales de acceso. Notifica inmediatamente a Trading Survivor si sospechas de uso no autorizado de tu cuenta.</p>
+            <h4>4. Suscripción y Pagos</h4>
+            <p>Trading Survivor ofrece una suscripción anual de <strong>$129 USD</strong>. El pago otorga acceso completo a todas las funcionalidades durante 12 meses. No se realizan reembolsos una vez activada la suscripción. Se aceptan pagos en criptomonedas (BTC, ETH, USDT y otras).</p>
+            <h4>5. Uso Permitido</h4>
+            <p>La plataforma es exclusivamente para uso personal de análisis y journaling de trading. Está prohibido automatizar el acceso mediante bots, revender el acceso, extraer datos masivamente o usar la plataforma para actividades fraudulentas.</p>
+            <h4>6. Limitación de Responsabilidad</h4>
+            <p>Trading Survivor es una herramienta de análisis y journaling. <strong>No proporcionamos asesoramiento financiero ni recomendaciones de inversión.</strong> Las decisiones de trading son exclusivamente responsabilidad del usuario.</p>
+            <h4>7. Modificaciones</h4>
+            <p>Nos reservamos el derecho de modificar estos términos en cualquier momento con al menos 30 días de antelación.</p>
+            <h4>8. Contacto</h4>
+            <p>Para consultas: <strong>soporte@tradingsurvivor.com</strong></p>
+        </div>
+    </div>
+</div>
+
+<!-- ─── MODAL: PRIVACIDAD ──────────────────────────────────── -->
+<div class="modal-overlay" id="privacyModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Política de Privacidad</h3>
+            <button class="modal-close" onclick="closeModal('privacyModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <p><strong>Última actualización:</strong> 8 de marzo de 2026</p>
+            <h4>1. Datos que Recopilamos</h4>
+            <p>• <strong>Datos de cuenta:</strong> nombre, email y contraseña (cifrada con bcrypt).<br>
+            • <strong>Datos de trading:</strong> operaciones y métricas que introduces o sincronizas.<br>
+            • <strong>Datos técnicos:</strong> IP, tipo de navegador y datos de uso anónimos.</p>
+            <h4>2. Cómo Usamos tus Datos</h4>
+            <p>Únicamente para: proveer el servicio, autenticarte, enviarte emails de cuenta y calcular métricas dentro de la plataforma. Nunca para publicidad ni venta a terceros.</p>
+            <h4>3. Tus Datos de Trading</h4>
+            <p>Los datos de tus operaciones son <strong>privados y de tu exclusiva propiedad</strong>. No los vendemos, compartimos ni usamos para fines ajenos a tu uso personal.</p>
+            <h4>4. Seguridad</h4>
+            <p>Datos almacenados en Supabase con cifrado en reposo y en tránsito (TLS 1.3). Contraseñas con hash bcrypt. Claves API con cifrado AES-256.</p>
+            <h4>5. Tus Derechos</h4>
+            <p>Tienes derecho a acceder, corregir, exportar y eliminar tus datos. Escribe a <strong>privacidad@tradingsurvivor.com</strong></p>
+            <h4>6. Retención de Datos</h4>
+            <p>Datos conservados mientras tu cuenta esté activa. Al cancelar, eliminamos todo en 30 días.</p>
+            <h4>7. Contacto</h4>
+            <p><strong>privacidad@tradingsurvivor.com</strong></p>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { createClient } from '@supabase/supabase-js';
+
+    const supabase = createClient(
+        'https://gakiamardmlgftfrlxkm.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdha2lhbWFyZG1sZ2Z0ZnJseGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjczMzUsImV4cCI6MjA2ODYwMzMzNX0.wR3c9DMtSXzoagFDJdrmYqnN6vjfQMn8ijtUdOSpmYM'
+    );
+
+    // Auto-redirect if already logged in (skip on localhost / Live Server)
+    const isLocalDev = ['localhost', '127.0.0.1'].includes(location.hostname) ||
+                       location.hostname.startsWith('192.168.');
+    if (!isLocalDev) {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) window.location.replace('platform.html');
+        }).catch(() => {});
+    }
+
+    function showMsg(text, type = 'error') {
+        const el = document.getElementById('regMsg');
+        el.className = `msg ${type} show`;
+        el.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i> ${text}`;
+    }
+
+    function hideMsg() {
+        const el = document.getElementById('regMsg');
+        el.className = 'msg';
+    }
+
+    function setLoading(loading) {
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = loading;
+        btn.innerHTML = loading
+            ? '<i class="fas fa-spinner"></i> Creando cuenta...'
+            : '<i class="fas fa-shield-alt"></i> Crear Mi Cuenta';
+    }
+
+    window.handleRegister = async function(e) {
+        e.preventDefault();
+        hideMsg();
+
+        const email    = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const confirm  = document.getElementById('regConfirm').value;
+        const terms    = document.getElementById('termsCheck').checked;
+
+        if (!terms) {
+            showMsg('Debes aceptar los Términos de Servicio para continuar');
+            return;
+        }
+
+        if (password !== confirm) {
+            showMsg('Las contraseñas no coinciden');
+            return;
+        }
+
+        if (password.length < 6) {
+            showMsg('La contraseña debe tener al menos 6 caracteres');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const { data, error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
+
+            if (data.user && !data.session) {
+                // Email confirmation required
+                document.getElementById('registerView').style.display = 'none';
+                document.getElementById('successEmail').textContent = email;
+                document.getElementById('successScreen').classList.add('show');
+            } else if (data.session) {
+                // Auto-confirmed
+                showMsg('¡Cuenta creada! Redirigiendo al pago...', 'success');
+                setTimeout(() => window.location.replace('payment.html'), 900);
+            }
+        } catch (err) {
+            showMsg(getErrMsg(err.message));
+            setLoading(false);
+        }
+    };
+
+    function getErrMsg(msg) {
+        const map = {
+            'User already registered':    'Este email ya tiene una cuenta. <a href="login.html" style="color:var(--primary);">Inicia sesión</a>',
+            'Password should be at least 6 characters': 'La contraseña debe tener mínimo 6 caracteres',
+            'Unable to validate email address: invalid format': 'Formato de email inválido',
+            'For security purposes':      'Espera unos minutos antes de intentarlo de nuevo',
+            'Email rate limit exceeded':  'Demasiados intentos, espera unos minutos',
+        };
+        for (const [k, v] of Object.entries(map)) {
+            if (msg && msg.includes(k)) return v;
+        }
+        return msg || 'Error inesperado. Inténtalo de nuevo.';
+    }
+</script>
+
+<script>
+    // Password toggle
+    window.togglePwd = function(id, btn) {
+        const input = document.getElementById(id);
+        const icon  = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    };
+
+    // Password strength indicator
+    window.updateStrength = function(pwd) {
+        const bars  = [1,2,3,4].map(i => document.getElementById('bar' + i));
+        const label = document.getElementById('pwdLabel');
+        let score   = 0;
+
+        if (pwd.length >= 6)  score++;
+        if (pwd.length >= 10) score++;
+        if (/[A-Z]/.test(pwd) || /[0-9]/.test(pwd)) score++;
+        if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+        const classes = ['', 'active-weak', 'active-fair', 'active-strong', 'active-strong'];
+        const labels  = ['—', 'Débil', 'Regular', 'Fuerte', 'Muy fuerte'];
+
+        bars.forEach((b, i) => {
+            b.className = 'pwd-bar' + (i < score ? ' ' + classes[score] : '');
+        });
+
+        label.textContent = pwd.length === 0 ? '—' : labels[score];
+        label.style.color = score >= 3 ? 'var(--primary)' : score === 2 ? '#ffaa00' : '#ff4444';
+    };
+
+    // Modals
+    window.openModal = function(id)  { document.getElementById(id).classList.add('open'); };
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
+
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+        o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open')
+            .forEach(m => m.classList.remove('open'));
+    });
+</script>
+
+</body>
+</html>

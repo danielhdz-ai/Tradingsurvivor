@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Survivor — Activar Suscripción</title>
+    <link rel="icon" href="logos/trader-survivor-logo.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script type="importmap">{ "imports": { "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2" } }</script>
+    <style>
+        :root {
+            --primary: #39ff14;
+            --primary-glow: rgba(57,255,20,0.15);
+            --primary-glow-strong: rgba(57,255,20,0.3);
+            --bg: #000;
+            --bg-card: #0a0a0a;
+            --bg-surface: #111;
+            --bg-input: #161616;
+            --border: rgba(57,255,20,0.18);
+            --border-soft: rgba(255,255,255,0.07);
+            --text: #fff;
+            --text-secondary: #888;
+            --text-muted: #555;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { height: 100%; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ─── NAV ─────────────────────────────────────── */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            height: 64px;
+            border-bottom: 1px solid var(--border-soft);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .nav-logo img {
+            height: 46px;
+            filter: drop-shadow(0 0 8px var(--primary));
+        }
+
+        .nav-logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .nav-logo-text span { color: var(--primary); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .nav-user i { color: var(--primary); }
+
+        /* ─── MAIN LAYOUT ─────────────────────────────── */
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 1fr 520px;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* ─── LEFT: SUMMARY ───────────────────────────── */
+        .left-panel {
+            padding: 56px 64px;
+            position: relative;
+            overflow: hidden;
+            border-right: 1px solid var(--border-soft);
+        }
+
+        .left-grid-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse 80% 80% at 30% 40%, black 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .left-glow {
+            position: absolute;
+            top: 60px; left: -60px;
+            width: 480px; height: 480px;
+            background: radial-gradient(circle, rgba(57,255,20,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .left-inner { position: relative; z-index: 2; }
+
+        .order-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .product-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .product-icon {
+            width: 64px; height: 64px;
+            min-width: 64px;
+            border-radius: 16px;
+            background: var(--primary-glow);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(57,255,20,0.12);
+        }
+
+        .product-icon img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 6px rgba(57,255,20,0.5));
+        }
+
+        .product-info {}
+
+        .product-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .product-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            margin: 20px 0 0;
+        }
+
+        .price-big {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: 0 0 24px rgba(57,255,20,0.4);
+            line-height: 1;
+        }
+
+        .price-big sup {
+            font-size: 1.2rem;
+            vertical-align: top;
+            margin-top: 6px;
+        }
+
+        .price-period {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding-bottom: 4px;
+        }
+
+        .price-note {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Features list */
+        .features-section {
+            margin-bottom: 32px;
+        }
+
+        .features-section-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .feature-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feature-row-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-row-item .check {
+            width: 20px; height: 20px;
+            min-width: 20px;
+            border-radius: 50%;
+            border: 1px solid var(--primary);
+            background: var(--primary-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.6rem;
+        }
+
+        /* Trust badges */
+        .trust-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 100px;
+            font-size: 0.76rem;
+            color: var(--text-secondary);
+        }
+
+        .trust-badge i { color: var(--primary); font-size: 0.72rem; }
+
+        /* ─── RIGHT: PAYMENT ──────────────────────────── */
+        .right-panel {
+            background: var(--bg-card);
+            padding: 56px 48px;
+        }
+
+        .payment-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .payment-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+        }
+
+        /* ─── METHOD TABS ─────────────────────────────── */
+        .method-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .method-tab {
+            padding: 16px;
+            background: var(--bg-surface);
+            border: 1.5px solid var(--border-soft);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.22s;
+            text-align: center;
+        }
+
+        .method-tab:hover { border-color: rgba(57,255,20,0.25); }
+
+        .method-tab.active {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            box-shadow: 0 0 20px rgba(57,255,20,0.08);
+        }
+
+        .method-tab-icon {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .method-tab-icon .card-icons {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            font-size: 1.2rem;
+        }
+
+        .method-tab-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .method-tab-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ─── METHOD CONTENT ──────────────────────────── */
+        .method-content { display: none; }
+        .method-content.active { display: block; }
+
+        /* ─── STRIPE SECTION ──────────────────────────── */
+        .stripe-box {
+            padding: 28px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+
+        .stripe-secure {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .stripe-secure i { color: var(--primary); }
+
+        .stripe-logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* Card form mock (Stripe will replace this via Elements) */
+        .card-field {
+            margin-bottom: 14px;
+        }
+
+        .card-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 7px;
+        }
+
+        .card-input-wrap {
+            position: relative;
+        }
+
+        .card-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-soft);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .card-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(57,255,20,0.08);
+        }
+
+        .card-input::placeholder { color: var(--text-muted); }
+
+        .card-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Stripe Elements placeholder */
+        #card-element {
+            padding: 13px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-soft);
+            border-radius: 10px;
+            transition: border-color 0.2s;
+        }
+
+        #card-element.StripeElement--focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(57,255,20,0.08);
+        }
+
+        #card-errors {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #ff8080;
+            min-height: 20px;
+        }
+
+        /* ─── CRYPTO SECTION ──────────────────────────── */
+        .crypto-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .crypto-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: var(--bg-surface);
+            border: 1.5px solid var(--border-soft);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .crypto-option:hover,
+        .crypto-option.selected {
+            border-color: var(--border);
+            background: var(--primary-glow);
+        }
+
+        .crypto-option input[type="radio"] {
+            accent-color: var(--primary);
+            width: 16px; height: 16px;
+            flex-shrink: 0;
+        }
+
+        .crypto-logo {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .crypto-option-info { flex: 1; }
+
+        .crypto-option-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .crypto-option-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .crypto-option-tag {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 100px;
+            background: var(--primary-glow);
+            border: 1px solid var(--border);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Crypto address box (shown after selecting) */
+        .crypto-address-box {
+            display: none;
+            padding: 20px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+
+        .crypto-address-box.show { display: block; }
+
+        .address-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .address-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .address-value {
+            font-family: 'Space Mono', 'Courier New', monospace;
+            font-size: 0.78rem;
+            color: var(--primary);
+            flex: 1;
+            word-break: break-all;
+            line-height: 1.5;
+            background: var(--bg-input);
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(57,255,20,0.1);
+        }
+
+        .copy-btn {
+            padding: 8px 14px;
+            background: var(--primary-glow);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--primary);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover { background: rgba(57,255,20,0.2); }
+
+        .amount-to-send {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px;
+            background: var(--bg-input);
+            border-radius: 8px;
+        }
+
+        .amount-to-send strong { color: var(--primary); }
+
+        .network-warning {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #ffaa00;
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        /* ─── SUBMIT BUTTON ───────────────────────────── */
+        .btn-pay {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--primary);
+            color: #000;
+            font-size: 1rem;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 0 24px rgba(57,255,20,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.01em;
+            text-decoration: none;
+        }
+
+        .btn-pay:hover {
+            background: #50ff30;
+            box-shadow: 0 0 40px rgba(57,255,20,0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-pay:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-pay-secondary {
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            transition: all 0.22s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-pay-secondary:hover {
+            background: var(--primary-glow);
+        }
+
+        /* Total row */
+        .total-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-top: 1px solid var(--border-soft);
+            border-bottom: 1px solid var(--border-soft);
+            margin-bottom: 20px;
+        }
+
+        .total-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .total-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        /* Message */
+        .msg {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            margin-bottom: 16px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .msg.error { background: rgba(255,68,68,0.1); border: 1px solid rgba(255,68,68,0.3); color: #ff8080; }
+        .msg.success { background: var(--primary-glow); border: 1px solid var(--border); color: var(--primary); }
+        .msg.show { display: flex; }
+
+        /* ─── SUCCESS SCREEN ──────────────────────────── */
+        #successScreen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        #successScreen.show { display: block; }
+
+        .success-circle {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: var(--primary-glow);
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0 auto 28px;
+            box-shadow: 0 0 40px rgba(57,255,20,0.2);
+            animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.4); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        #successScreen h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        #successScreen p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        /* ─── RESPONSIVE ──────────────────────────────── */
+        @media (max-width: 1024px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            .left-panel { border-right: none; border-bottom: 1px solid var(--border-soft); padding: 36px 24px; }
+            .right-panel { padding: 36px 24px; }
+        }
+
+        /* ─── CARD BRAND LOGOS ───────────────────────── */
+        .accepted-cards {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .accepted-cards-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+        }
+        .card-logos-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .card-brand-logo {
+            width: 46px;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: block;
+            transition: opacity 0.25s, filter 0.25s;
+        }
+        .card-brand-logo.dimmed {
+            opacity: 0.2;
+            filter: grayscale(1);
+        }
+        /* ─── CARDHOLDER NAME ICON ────────────────────── */
+        .card-input-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            pointer-events: none;
+        }
+        /* ─── PAYMENT SECURITY FOOTER ─────────────────── */
+        .payment-security-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-soft);
+        }
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .security-item i { color: var(--primary); font-size: 0.68rem; }
+        .powered-by-stripe {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .powered-by-stripe strong { color: #635BFF; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .fa-spinner { animation: spin 0.8s linear infinite; }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <img src="logos/traders-survivor-logo.png" alt="Trading Survivor">
+            <span class="nav-logo-text">Trading<span>Survivor</span></span>
+        </a>
+        <div class="nav-right">
+            <div class="nav-user">
+                <i class="fas fa-user-circle"></i>
+                <span id="navEmail">—</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-wrap">
+
+        <!-- ═══════════════════════════════════ LEFT -->
+        <div class="left-panel">
+            <div class="left-grid-bg"></div>
+            <div class="left-glow"></div>
+            <div class="left-inner">
+
+                <div class="order-label">Resumen del pedido</div>
+
+                <div class="product-header">
+                    <div class="product-icon"><img src="logos/traders-survivor-logo.png" alt="Trading Survivor"></div>
+                    <div class="product-info">
+                        <div class="product-name">Trading Survivor — Acceso Total</div>
+                        <div class="product-desc">Journal profesional · Todas las funciones incluidas · Acceso inmediato</div>
+                        <div class="price-row">
+                            <div class="price-big"><sup>$</sup>129</div>
+                            <div class="price-period">/ año</div>
+                        </div>
+                        <div class="price-note">Equivale a $10.75/mes · Renovación anual · Sin compromisos</div>
+                    </div>
+                </div>
+
+                <div class="features-section">
+                    <div class="features-section-title">Todo incluido en tu suscripción</div>
+                    <div class="feature-rows">
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Dashboard de operaciones con +50 métricas</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Sincronización automática con 15+ exchanges (API + CSV)</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Gestión completa de cuentas Funded</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Calendario financiero interactivo</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Chartbook y Playbook de estrategias</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Audición Funded — control de pruebas y estadísticas</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> AI Coach — análisis inteligente de tu rendimiento</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Notebook personal y diario de trading</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Red social de traders — comunidad activa</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Finanzas del negocio trader completas</div>
+                        <div class="feature-row-item"><span class="check"><i class="fas fa-check"></i></span> Actualizaciones de plataforma incluidas</div>
+                    </div>
+                </div>
+
+                <div class="trust-badges">
+                    <div class="trust-badge"><i class="fas fa-lock"></i> Pago seguro</div>
+                    <div class="trust-badge"><i class="fas fa-bolt"></i> Acceso inmediato</div>
+                    <div class="trust-badge"><i class="fab fa-bitcoin"></i> Crypto aceptado</div>
+                    <div class="trust-badge"><i class="fas fa-headset"></i> Soporte incluido</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════ RIGHT -->
+        <div class="right-panel">
+
+            <div id="paymentView">
+                <div class="payment-title">Activar Suscripción</div>
+                <div class="payment-subtitle">Selecciona tu método de pago preferido</div>
+
+                <div class="msg" id="payMsg"></div>
+
+                <!-- Method Tabs -->
+                <div class="method-tabs">
+                    <div class="method-tab active" id="tab-card" onclick="selectMethod('card')">
+                        <div class="method-tab-icon">
+                            <div class="card-icons" style="display:flex;justify-content:center;gap:3px;">
+                                <!-- Visa -->
+                                <svg width="28" height="18" viewBox="0 0 46 30" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="46" height="30" rx="4" fill="#1A1F71"/>
+                                    <text x="23" y="20" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="900" font-style="italic" fill="white">VISA</text>
+                                </svg>
+                                <!-- Mastercard -->
+                                <svg width="28" height="18" viewBox="0 0 46 30" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="46" height="30" rx="4" fill="#1E1E1E"/>
+                                    <clipPath id="mc-tab-clip"><circle cx="28" cy="15" r="8"/></clipPath>
+                                    <circle cx="18" cy="15" r="8" fill="#EB001B"/>
+                                    <circle cx="28" cy="15" r="8" fill="#F79E1B"/>
+                                    <circle cx="18" cy="15" r="8" fill="#FF5F00" clip-path="url(#mc-tab-clip)"/>
+                                </svg>
+                                <!-- AMEX -->
+                                <svg width="28" height="18" viewBox="0 0 46 30" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="46" height="30" rx="4" fill="#2557D6"/>
+                                    <text x="23" y="19" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="9.5" font-weight="900" fill="white" letter-spacing="1">AMEX</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="method-tab-label">Tarjeta</div>
+                        <div class="method-tab-desc">Visa · Mastercard · AMEX</div>
+                    </div>
+                    <div class="method-tab" id="tab-crypto" onclick="selectMethod('crypto')">
+                        <div class="method-tab-icon" style="font-size:1.5rem;">₿</div>
+                        <div class="method-tab-label">Criptomoneda</div>
+                        <div class="method-tab-desc">BTC · ETH · USDT · USDC</div>
+                    </div>
+                </div>
+
+                <!-- ─── CARD PAYMENT ─────────────────────────── -->
+                <div class="method-content active" id="content-card">
+
+                    <!-- Tarjetas aceptadas -->
+                    <div class="accepted-cards">
+                        <span class="accepted-cards-label">Tarjetas aceptadas</span>
+                        <div class="card-logos-row">
+                            <!-- Visa -->
+                            <svg class="card-brand-logo" id="logo-visa" viewBox="0 0 46 30" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="46" height="30" rx="4" fill="#1A1F71"/>
+                                <text x="23" y="20" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="900" font-style="italic" fill="white">VISA</text>
+                            </svg>
+                            <!-- Mastercard -->
+                            <svg class="card-brand-logo" id="logo-mc" viewBox="0 0 46 30" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="46" height="30" rx="4" fill="#1E1E1E"/>
+                                <clipPath id="mc-main-clip"><circle cx="28" cy="15" r="8"/></clipPath>
+                                <circle cx="18" cy="15" r="8" fill="#EB001B"/>
+                                <circle cx="28" cy="15" r="8" fill="#F79E1B"/>
+                                <circle cx="18" cy="15" r="8" fill="#FF5F00" clip-path="url(#mc-main-clip)"/>
+                            </svg>
+                            <!-- AMEX -->
+                            <svg class="card-brand-logo" id="logo-amex" viewBox="0 0 46 30" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="46" height="30" rx="4" fill="#2557D6"/>
+                                <text x="23" y="19" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="9.5" font-weight="900" fill="white" letter-spacing="1">AMEX</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="total-row">
+                        <span class="total-label">Total a pagar hoy</span>
+                        <span class="total-amount">$129.00 USD</span>
+                    </div>
+
+                    <div class="stripe-box">
+                        <div class="stripe-secure">
+                            <i class="fas fa-lock"></i>
+                            <span>Cifrado TLS 1.3 · Procesado por Stripe · Datos nunca almacenados</span>
+                        </div>
+
+                        <!-- Nombre del titular -->
+                        <div class="card-field">
+                            <label class="card-label" for="cardholderName">Nombre en la tarjeta</label>
+                            <div class="card-input-wrap">
+                                <input type="text" id="cardholderName" class="card-input" placeholder="Como aparece en tu tarjeta" autocomplete="cc-name" spellcheck="false">
+                                <i class="fas fa-user card-input-icon"></i>
+                            </div>
+                        </div>
+
+                        <!-- Stripe Elements: número · vencimiento · CVC -->
+                        <div class="card-field">
+                            <label class="card-label">Número de tarjeta · Vencimiento · CVC</label>
+                            <div id="card-element">
+                                <div style="padding:2px 0; color: var(--text-muted); font-size:0.88rem;">
+                                    Cargando formulario seguro de Stripe...
+                                </div>
+                            </div>
+                            <div id="card-errors" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-pay" id="btnPay" onclick="handleCardPayment()">
+                        <i class="fas fa-lock"></i>
+                        Pagar $129.00 de forma segura
+                    </button>
+
+                    <!-- Footer de seguridad -->
+                    <div class="payment-security-footer">
+                        <div class="security-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>SSL cifrado</span>
+                        </div>
+                        <div class="powered-by-stripe">
+                            Powered by <strong>Stripe</strong>
+                        </div>
+                        <div class="security-item">
+                            <i class="fas fa-eye-slash"></i>
+                            <span>Sin guardar datos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ─── CRYPTO PAYMENT ─────────────────────────── -->
+                <div class="method-content" id="content-crypto">
+                    <div class="total-row">
+                        <span class="total-label">Total a pagar</span>
+                        <span class="total-amount">$129.00 USD</span>
+                    </div>
+
+                    <div class="crypto-options">
+                        <label class="crypto-option selected" onclick="selectCrypto('usdt-trc20', this)">
+                            <input type="radio" name="crypto" value="usdt-trc20" checked>
+                            <div class="crypto-logo" style="background:#26a17b22; color:#26a17b;">₮</div>
+                            <div class="crypto-option-info">
+                                <div class="crypto-option-name">USDT (TRC-20)</div>
+                                <div class="crypto-option-note">Tron · Comisión ~$1 · Rápido</div>
+                            </div>
+                            <div class="crypto-option-tag">Recomendado</div>
+                        </label>
+
+                        <label class="crypto-option" onclick="selectCrypto('usdt-erc20', this)">
+                            <input type="radio" name="crypto" value="usdt-erc20">
+                            <div class="crypto-logo" style="background:#26a17b22; color:#26a17b;">₮</div>
+                            <div class="crypto-option-info">
+                                <div class="crypto-option-name">USDT (ERC-20)</div>
+                                <div class="crypto-option-note">Ethereum · Comisión variable</div>
+                            </div>
+                        </label>
+
+                        <label class="crypto-option" onclick="selectCrypto('btc', this)">
+                            <input type="radio" name="crypto" value="btc">
+                            <div class="crypto-logo" style="background:#f7931a22; color:#f7931a;"><i class="fab fa-bitcoin"></i></div>
+                            <div class="crypto-option-info">
+                                <div class="crypto-option-name">Bitcoin (BTC)</div>
+                                <div class="crypto-option-note">Red Bitcoin · ~10-60 min confirmación</div>
+                            </div>
+                        </label>
+
+                        <label class="crypto-option" onclick="selectCrypto('eth', this)">
+                            <input type="radio" name="crypto" value="eth">
+                            <div class="crypto-logo" style="background:#6271e422; color:#627ee4;"><i class="fab fa-ethereum"></i></div>
+                            <div class="crypto-option-info">
+                                <div class="crypto-option-name">Ethereum (ETH)</div>
+                                <div class="crypto-option-note">Red Ethereum · Rápido</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Address display -->
+                    <div class="crypto-address-box show" id="cryptoAddressBox">
+                        <div class="address-label" id="addressLabel">Dirección USDT TRC-20</div>
+                        <div class="address-row">
+                            <div class="address-value" id="addressValue">CONFIGURA_TU_DIRECCION_AQUI</div>
+                            <button class="copy-btn" onclick="copyAddress()">
+                                <i class="fas fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                        <div class="amount-to-send">
+                            <span>Monto exacto a enviar:</span>
+                            <strong id="cryptoAmount">$129.00 USDT</strong>
+                        </div>
+                        <div class="network-warning">
+                            <i class="fas fa-exclamation-triangle" style="margin-top:2px; flex-shrink:0;"></i>
+                            <span>Red: <strong id="networkName">TRC-20 (Tron)</strong> — Envía solo en esta red. Envíos en redes distintas pueden perderse permanentemente.</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-pay" onclick="handleCryptoSent()">
+                        <i class="fas fa-paper-plane"></i>
+                        Ya Envié el Pago — Notificar
+                    </button>
+
+                    <button class="btn-pay-secondary" onclick="openCoinbaseCommerce()">
+                        <i class="fas fa-external-link-alt"></i>
+                        Pagar con Coinbase Commerce (automático)
+                    </button>
+
+                    <p style="text-align:center; font-size:0.74rem; color:var(--text-muted); margin-top:14px; line-height:1.6;">
+                        Tras confirmar el pago, recibirás acceso en menos de 24 horas.<br>
+                        Para activación automática usa <strong style="color:var(--text-secondary);">Coinbase Commerce</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SUCCESS SCREEN -->
+            <div id="successScreen">
+                <div class="success-circle"><i class="fas fa-check"></i></div>
+                <h2>¡Pago Confirmado!</h2>
+                <p>
+                    Tu suscripción anual está activa.<br>
+                    Ya tienes acceso completo a <strong style="color:var(--primary);">Trading Survivor</strong>.<br><br>
+                    Bienvenido al 10% que sobrevive al mercado.
+                </p>
+                <a href="platform.html" class="btn-pay" style="text-decoration:none; max-width:320px; margin:0 auto;">
+                    <i class="fas fa-rocket"></i> Ir a la Plataforma
+                </a>
+            </div>
+
+            <!-- CRYPTO PENDING SCREEN -->
+            <div id="cryptoPendingScreen" style="display:none; text-align:center; padding: 40px 20px;">
+                <div style="width:72px; height:72px; border-radius:50%; background:rgba(255,170,0,0.1); border:2px solid #ffaa00; display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:#ffaa00; margin:0 auto 24px; box-shadow:0 0 30px rgba(255,170,0,0.15);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.5rem; font-weight:800; margin-bottom:12px;">¡Notificación Enviada!</h2>
+                <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.7; margin-bottom:28px;">
+                    Hemos recibido tu notificación de pago.<br>
+                    Verificaremos la transacción en las próximas <strong style="color:#ffaa00;">24 horas</strong>.<br><br>
+                    Recibirás un email en <strong id="pendingEmail" style="color:var(--primary);"></strong> cuando tu cuenta esté activada.
+                </p>
+                <a href="index.html" class="btn-pay" style="text-decoration:none; max-width:280px; margin:0 auto; background:transparent; border:1px solid var(--border); color:var(--text);">
+                    <i class="fas fa-home"></i> Volver al inicio
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- STRIPE JS (cargar dinámicamente) -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script type="module">
+        import { createClient } from '@supabase/supabase-js';
+
+        const supabase = createClient(
+            'https://gakiamardmlgftfrlxkm.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdha2lhbWFyZG1sZ2Z0ZnJseGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjczMzUsImV4cCI6MjA2ODYwMzMzNX0.wR3c9DMtSXzoagFDJdrmYqnN6vjfQMn8ijtUdOSpmYM'
+        );
+
+        // Check session
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+            document.getElementById('navEmail').textContent = session.user.email;
+            window._userEmail = session.user.email;
+            window._userId   = session.user.id;
+        } else {
+            // Not logged in — redirect to register
+            window.location.href = 'register.html';
+        }
+
+        // ── Init Stripe ──────────────────────────────────────
+        // Coloca aquí tu Stripe PUBLISHABLE Key (empieza con pk_live_ o pk_test_)
+        const STRIPE_PUBLIC_KEY = 'pk_live_51T8yHUQVt0WXsF0HG46bMiLMJL5FQL2VbhFxoSiqDOXvFJNJm0drSZ6ldowsFdJtaPJk3xl7pbuKgHoC31nvh4II00jv2LuV3X';
+
+        let stripe, cardElement;
+
+        if (STRIPE_PUBLIC_KEY.startsWith('pk_')) {
+            try {
+                stripe = Stripe(STRIPE_PUBLIC_KEY);
+                const elements = stripe.elements({
+                    appearance: {
+                        theme: 'night',
+                        variables: {
+                            colorPrimary: '#39ff14',
+                            colorBackground: '#161616',
+                            colorText: '#ffffff',
+                            colorDanger: '#ff4444',
+                            fontFamily: 'Inter, sans-serif',
+                            borderRadius: '10px',
+                        }
+                    }
+                });
+
+                cardElement = elements.create('card', {
+                    style: {
+                        base: {
+                            color: '#fff',
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: '15px',
+                            '::placeholder': { color: '#555' },
+                        },
+                        invalid: { color: '#ff4444' }
+                    }
+                });
+
+                cardElement.mount('#card-element');
+                cardElement.on('change', e => {
+                    document.getElementById('card-errors').textContent = e.error ? e.error.message : '';
+                    // Highlight detected card brand
+                    const brandMap = { visa: 'logo-visa', mastercard: 'logo-mc', amex: 'logo-amex' };
+                    const allIds = ['logo-visa', 'logo-mc', 'logo-amex'];
+                    const detected = brandMap[e.brand];
+                    allIds.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.classList.toggle('dimmed', !!detected && id !== detected);
+                    });
+                });
+            } catch (e) {
+                document.getElementById('card-element').innerHTML =
+                    '<p style="color:var(--text-muted); font-size:0.82rem; padding:4px 0;">⚠️ Stripe no configurado aún. Configura tu Stripe Publishable Key.</p>';
+            }
+        } else {
+            document.getElementById('card-element').innerHTML =
+                '<p style="color:var(--text-muted); font-size:0.82rem; padding:4px 0;">⚠️ Stripe no configurado. Ver instrucciones en la documentación.</p>';
+        }
+
+        // ── Card Payment ─────────────────────────────────────
+        window.handleCardPayment = async function() {
+            if (!stripe || !cardElement) {
+                showMsg('Stripe no está configurado. Usa el pago en crypto o contacta soporte.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btnPay');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner"></i> Procesando...';
+
+            try {
+                // 1. Create PaymentIntent via backend
+                const res = await fetch('/api/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: window._userId,
+                        email:  window._userEmail
+                    })
+                });
+
+                if (!res.ok) throw new Error('Error al crear sesión de pago');
+                const { clientSecret } = await res.json();
+
+                // 2. Confirm payment with Stripe
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: document.getElementById('cardholderName')?.value?.trim() || undefined,
+                            email: window._userEmail
+                        }
+                    }
+                });
+
+                if (error) throw new Error(error.message);
+
+                if (paymentIntent.status === 'succeeded') {
+                    showSuccess();
+                }
+            } catch (err) {
+                showMsg(err.message || 'Error procesando el pago. Inténtalo de nuevo.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pagar $129.00 de forma segura';
+            }
+        };
+
+        // ── Crypto sent notification ─────────────────────────
+        window.handleCryptoSent = async function() {
+            const selectedCrypto = document.querySelector('input[name="crypto"]:checked')?.value || 'usdt-trc20';
+            const address = document.getElementById('addressValue').textContent;
+
+            try {
+                // Send notification email via Supabase / backend
+                await fetch('/api/crypto-payment-notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: window._userId,
+                        email:  window._userEmail,
+                        crypto: selectedCrypto,
+                        amount: 129,
+                        address
+                    })
+                }).catch(() => {}); // graceful fail if endpoint not set up
+            } catch (_) {}
+
+            document.getElementById('paymentView').style.display = 'none';
+            document.getElementById('pendingEmail').textContent = window._userEmail || '';
+            document.getElementById('cryptoPendingScreen').style.display = 'block';
+        };
+
+        // ── Coinbase Commerce ────────────────────────────────
+        window.openCoinbaseCommerce = function() {
+            // REEMPLAZA con tu Coinbase Commerce hosted link
+            const COINBASE_COMMERCE_URL = 'https://commerce.coinbase.com/checkout/REEMPLAZA_CON_TU_CHARGE_ID';
+            window.open(COINBASE_COMMERCE_URL, '_blank');
+        };
+
+        function showSuccess() {
+            document.getElementById('paymentView').style.display = 'none';
+            document.getElementById('successScreen').classList.add('show');
+        }
+
+        window.showSuccess = showSuccess;
+
+        function showMsg(text, type = 'error') {
+            const el = document.getElementById('payMsg');
+            el.className = `msg ${type} show`;
+            el.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i> ${text}`;
+        }
+    </script>
+
+    <script>
+        // ── Method switching ──────────────────────────────────
+        window.selectMethod = function(method) {
+            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.method-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + method).classList.add('active');
+            document.getElementById('content-' + method).classList.add('active');
+        };
+
+        // ── Crypto selection ──────────────────────────────────
+        const cryptoAddresses = {
+            'usdt-trc20': { label: 'Dirección USDT TRC-20',  address: 'TFBeNJEgGRzbBWwwV33eyJxmXK9WrTVogi', amount: '$129.00 USDT', network: 'TRC-20 (Tron)' },
+            'usdt-erc20': { label: 'Dirección USDT ERC-20',  address: '0x900ac2AC961F29DcEC9e264dc998143fc92165D6', amount: '$129.00 USDT', network: 'ERC-20 (Ethereum)' },
+            'btc':        { label: 'Dirección Bitcoin (BTC)', address: 'bc1q63yjfc5rlr2kwjcrhphrl3k4whs544372pjusn', amount: '≈ 0.00125 BTC', network: 'Red Bitcoin' },
+            'eth':        { label: 'Dirección Ethereum (ETH)', address: '0x900ac2AC961F29DcEC9e264dc998143fc92165D6', amount: '≈ 0.042 ETH', network: 'ERC-20 (Ethereum)' },
+        };
+
+        window.selectCrypto = function(type, el) {
+            document.querySelectorAll('.crypto-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            const data = cryptoAddresses[type];
+            document.getElementById('addressLabel').textContent  = data.label;
+            document.getElementById('addressValue').textContent  = data.address;
+            document.getElementById('cryptoAmount').textContent  = data.amount;
+            document.getElementById('networkName').textContent   = data.network;
+            document.getElementById('cryptoAddressBox').classList.add('show');
+        };
+
+        window.copyAddress = function() {
+            const val = document.getElementById('addressValue').textContent;
+            navigator.clipboard.writeText(val).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i> Copiar', 2000);
+            });
+        };
+    </script>
+
+</body>
+</html>
